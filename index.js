@@ -16,7 +16,7 @@ server.post('/api/users', (req, res)=> {
             })
             .catch(()=> {
                 res.status(500).json({ error: "There was an error while saving the user to the database" });
-            });
+            })
     }
 });
 
@@ -27,8 +27,27 @@ server.get('/api/users', (req, res) => {
         })
         .catch(() => {
             res.status(500).json({ error: "The users information could not be retrieved." })
-        });
+        })
 });
+
+server.get('/api/users/:id', (req,res) => {
+    Users.findById(req.params.id)
+        .then(user => {
+            if(!user){
+                res.status(404).json({ error: 'The user with the specified ID does not exist.' });
+            } else {
+                res.json(user);
+            }
+        })
+        .catch(() => {
+            res.status(500).json({error: "The user information could not be retrieved."})
+        })
+});
+
+// server.delete('/api/users/:id', (req, res) => {
+//     Users.remove(req.params.id)
+//     .then()
+// })
 
 const port = 5000;
 server.listen(port, ()=> console.log(`\n API on http://localhost:${port} \n`));
